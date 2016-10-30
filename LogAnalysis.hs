@@ -6,7 +6,6 @@ import Log
 
 -- Parse an individual log line.
 parseMessage :: String -> LogMessage
---parseMessage line = Unknown (unwords(words(line)))
 parseMessage line = case words(line) of
                       ("I" : (timestampStr : infoWords))               -> LogMessage Info (read timestampStr::Int) (unwords infoWords)
                       ("W" : (timestampStr : warningWords))            -> LogMessage Warning (read timestampStr:: Int) (unwords warningWords)
