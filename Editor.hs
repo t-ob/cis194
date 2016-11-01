@@ -37,6 +37,10 @@ commands = map show [View, Edit, Next, Prev, Quit]
 newtype Editor b a = Editor (StateT (b,Int) IO a)
   deriving (Functor, Monad, MonadIO, MonadState (b,Int))
 
+instance Applicative (Editor b) where
+    pure = return
+    (<*>) = ap
+
 runEditor :: Buffer b => Editor b a -> b -> IO a
 runEditor (Editor e) b = evalStateT e (b,0)
 
