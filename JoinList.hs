@@ -7,6 +7,8 @@ import Data.Monoid
 import Buffer
 import Sized
 import Scrabble
+import Editor
+
 
 data JoinList m a = Empty
                   | Single m a
@@ -81,7 +83,7 @@ instance Buffer (JoinList (Score, Size) String) where
     toString (Single _ s)       = s
     toString (Append _ jl1 jl2) = toString jl1 ++ toString jl2
 
-    fromString s = Single (scoreString s, Size 1) s
+    fromString s = foldr (+++) Empty $ map (\l -> Single (scoreString l, Size 1) l) $ lines s
 
     line = indexJ
 
@@ -92,3 +94,14 @@ instance Buffer (JoinList (Score, Size) String) where
     numLines = getSize . snd . tag
 
     value = getScore . fst . tag
+
+
+
+welcomeBuffer = foldr (+++) Empty $ map (\s -> Single (scoreString s, Size 1) s)
+        [ "This buffer is for notes you don't want to save, and for"
+         , "evaluation of steam valve coefficients."
+         , "To load a different file, type the character L followed"
+         , "by the name of the file."
+         ]
+
+main = runEditor editor $ welcomeBuffer
