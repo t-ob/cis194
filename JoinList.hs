@@ -49,3 +49,12 @@ dropJ _ Empty = Empty
 dropJ _ s@(Single _ _) = Empty
 dropJ i (Append _ jl1 jl2) | i <= getSize (size (tag jl1)) = (dropJ i jl1) +++ jl2
 dropJ i (Append _ jl1 jl2) = dropJ (i - getSize (size (tag jl1))) jl2
+
+
+takeJ :: (Sized b, Monoid b) =>
+         Int -> JoinList b a -> JoinList b a
+takeJ i _ | i <= 0 = Empty
+takeJ _ Empty = Empty
+takeJ i s@(Single _ _) = s
+takeJ i (Append _ jl1 _) | i <= getSize (size (tag jl1)) = takeJ i jl1
+takeJ i (Append _ jl1 jl2) = jl1 +++ (takeJ (i - getSize (size (tag jl1))) jl2)
