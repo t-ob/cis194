@@ -71,10 +71,10 @@ scoreLine s = Single (scoreString s) s
 
 
 -- Exercise 4
-jlFold :: c -> (a -> b -> c) -> (a -> c -> c -> c) -> JoinList a b -> c
-jlFold a _ _ Empty = a
-jlFold a f _ (Single m x) = f m x
-jlFold a f g (Append m jl1 jl2) = g m (jlFold a f g jl1) (jlFold a f g jl2)
+-- jlFold :: c -> (a -> b -> c) -> (a -> c -> c -> c) -> JoinList a b -> c
+-- jlFold a _ _ Empty = a
+-- jlFold a f _ (Single m x) = f m x
+-- jlFold a f g (Append m jl1 jl2) = g m (jlFold a f g jl1) (jlFold a f g jl2)
 
 instance Buffer (JoinList (Score, Size) String) where
     toString Empty              = ""
@@ -89,6 +89,6 @@ instance Buffer (JoinList (Score, Size) String) where
         | (i >=) . getSize . size .  snd . tag $ jl = jl
         | otherwise                                 = takeJ i jl +++ fromString s +++ dropJ (i + 1) jl
 
-    numLines = jlFold 0 (\_ x -> 1) (\_ x y -> x + y)
+    numLines = getSize . snd . tag
 
     value = getScore . fst . tag
