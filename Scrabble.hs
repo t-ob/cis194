@@ -2,8 +2,11 @@ module Scrabble where
 
 import Data.Char
 
-data Score = Score Integer
+data Score = Score Int
   deriving (Show, Eq)
+
+getScore :: Score -> Int
+getScore (Score i) = i
 
 instance Monoid Score where
     mempty = Score 0
